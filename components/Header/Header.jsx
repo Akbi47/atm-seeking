@@ -12,14 +12,8 @@ const Header = () => {
     const [open, setOpen] = useState(false)
     const router = useRouter();
 
-    const currentUser = {
-        id: 1,
-        username: "admin",
-        isSeller: true,
-    }
-
     useEffect(() => {
-        console.log("session:", session);
+        // console.log("session:", session);
         if (user && status === 'authenticated') {
             router.push("/");
         }
@@ -29,17 +23,23 @@ const Header = () => {
     }, [session, status, router])
 
     return (
-        <header className={`${user ? 'bg-[#21b2b6]' : 'bg-white'} flex items-center justify-center w-full`}>
-            <nav className=" w-[1200px] flex justify-between">
-                <div className='flex items-center'>
-                    <Image src='/logo.png'
-                        alt='logo'
-                        width={50}
-                        height={50}
-                    />
-                    <Link href="/" className="text-ct-dark-600 text-2xl font-semibold">
-                        Pub Seeking
-                    </Link>
+        <header className={`${user ? 'bg-[#54C0EB]' : 'bg-white'} flex items-center justify-center w-full p-2`}>
+            <nav className=" w-[1200px] flex justify-between md:w-[2100px]">
+                <div className='flex items-center gap-7'>
+                    <div className='flex items-center gap-3'>
+                        <Image src='/logo.png'
+                            alt='logo'
+                            width={50}
+                            height={50}
+                        />
+                        <Link href="/" className="text-ct-dark-600 text-2xl font-serif">
+                            ATM Seeking
+                        </Link>
+                    </div>
+                    <div className='flex text-white font-sans items-center gap-7'>
+                        <h2 className="cursor-pointer hover:text-[#443e8a]">Home</h2>
+                        <h2 className="cursor-pointer hover:text-[#443e8a]">Favourite</h2>
+                    </div>
                 </div>
                 <ul className="links">
                     {/* <li>
@@ -88,8 +88,10 @@ const Header = () => {
                             </div>
                             {user && (
                                 <div className="user" onClick={() => setOpen(!open)}>
-                                    <img src="https://media.istockphoto.com/id/1332100919/vector/man-icon-black-icon-person-symbol.jpg?s=612x612&w=0&k=20&c=AVVJkvxQQCuBhawHrUhDRTCeNQ3Jgt0K1tXjJsFy1eg=" alt="user avatar" />
-                                    <span>{currentUser?.username}</span>
+                                    <Image src={user.image}
+                                        alt='user' width={40} height={40} className='rounded-full'
+                                    />
+                                    <span>{(user?.name).substring(0,9)}</span>
                                     {open &&
                                         (
                                             <div className="options">
