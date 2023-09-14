@@ -9,6 +9,7 @@ import ScrollLeft from "./ScrollArrow/ScrollLeft";
 import ScrollRight from "./ScrollArrow/ScrollRight";
 import SkeltonLoading from "./SkeltonLoading/SkeltonLoading";
 import Marker from "./Marker/Marker";
+import CancelIcon from "./CancelIcon/CancelIcon";
 
 export {
     Header,
@@ -22,4 +23,5 @@ export {
     ScrollRight,
     SkeltonLoading,
     Marker,
+    CancelIcon
 }

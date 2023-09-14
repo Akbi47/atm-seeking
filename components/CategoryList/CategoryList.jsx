@@ -26,6 +26,7 @@ const CategoryList = ({ onCategoryChange }) => {
                             setSelectedCategory(idx);
                             onCategoryChange(item.value);
                         }}
+                        key={idx}
                     >
                         <Image
                             src={item.icon}

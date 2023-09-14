@@ -2,9 +2,10 @@
 import Image from "next/image"
 import { GetBusinessName, CheckFormatImg, CalcDistance } from "@/utils";
 import { useContext, useEffect, useState } from "react";
-import { UserLocationContext } from "@/context";
+import { UserLocationContext, SelectedBusinessContext } from "@/context";
+import { CancelIcon } from "..";
 
-const BusinessItem = ({ business, showDir = false }) => {
+const BusinessItem = ({ business, showDir = false, onModalChange = true }) => {
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
@@ -16,8 +17,9 @@ const BusinessItem = ({ business, showDir = false }) => {
 
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
 
+  const { selectedBusiness, setSelectedBusiness } = useContext(SelectedBusinessContext);
+
   const [distance, setDistance] = useState('');
-  console.log('distance', distance);
 
   useEffect(() => {
     getDistance();
@@ -41,6 +43,7 @@ const BusinessItem = ({ business, showDir = false }) => {
       setDistance(res);
     })
   }
+
   const getPathname = () => {
     let imgSource = CheckFormatImg(businessName);
     imgSource.then(res => {
@@ -48,6 +51,9 @@ const BusinessItem = ({ business, showDir = false }) => {
     })
   }
 
+  // const closeModal = () => {
+  //   setSelectedBusiness('');
+  // }
 
   return (
     <div className=" w-[195px] flex-shrink-0 p-2 rounded-lg shadow-md mb-4 ml-4
@@ -83,11 +89,21 @@ const BusinessItem = ({ business, showDir = false }) => {
         showDir &&
         (
           <div className="border-t-[1px] p-1 mt-1 ">
-            <h2 className="text-[#0075ff] flex justify-between items-center">Dis: {distance}
+            <h2 className="text-[#0075ff] flex justify-between items-center">
+              <span className="text-black">Dis: {distance}</span>
               <span className="border-[1px] rounded-full p-1 border-blue-500 
               hover:bg-blue-500 hover:text-white" onClick={() => onDirectionClick()}>
-                Get Direction
+                Get Details
               </span>
+              <button onClick={() => {
+                onModalChange(false);
+                // setSelectedBusiness('');
+              }
+              }>
+                <CancelIcon
+                  className='text-red-500 hover:scale-125'
+                />
+              </button>
             </h2>
           </div>
         )

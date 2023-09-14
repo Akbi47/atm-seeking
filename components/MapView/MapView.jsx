@@ -1,26 +1,28 @@
 'use client'
 import { SelectedBusinessContext, UserLocationContext } from "@/context";
-import { DirectionsRenderer, GoogleMap, MarkerF, DirectionsService } from "@react-google-maps/api"
-import { useContext, useState, useEffect } from "react";
+import { DirectionsRenderer, GoogleMap, MarkerF } from "@react-google-maps/api"
+import { useContext, useState, useEffect, useRef } from "react";
 import { Marker } from "..";
 
-const MapView = ({ businessList }) => {
+const MapView = ({ businessList, token }) => {
+    console.log('token 1', token);
 
-    const directionsService = new google.maps.DirectionsService(); // Initialize DirectionsService
-    const directionsRenderer = new google.maps.DirectionsRenderer(); // Initialize DirectionsRenderer
-    const { userLocation, setUserLocation } = useContext(UserLocationContext)
-    const { selectedBusiness, setSelectedBusiness } = useContext(SelectedBusinessContext)
+    const { userLocation, setUserLocation } = useContext(UserLocationContext);
+    const { selectedBusiness, setSelectedBusiness } = useContext(SelectedBusinessContext);
     const [map, setMap] = useState(null);
     const [directions, setDirections] = useState(null);
+    const directionsRendererRef = useRef(null);
+    const previousBusinessListRef = useRef(null);
+
     const containerStyle = {
         width: '100%',
         height: '70vh',
     };
 
+
     const getDirection = () => {
-        const directionsService = DirectionsService();
-        const directionsRenderer = DirectionsRenderer();
         if (map && selectedBusiness) {
+            const directionsService = new google.maps.DirectionsService();
             directionsService.route(
                 {
                     origin: userLocation,
@@ -28,32 +30,60 @@ const MapView = ({ businessList }) => {
                     travelMode: google.maps.TravelMode.DRIVING,
                 },
                 (result, status) => {
-
-                    directionsRenderer.setOptions({
-                        map: map, // Your Google Map instance
-
-                        suppressMarkers: true, // Hide the default markers
-                        routeIndex: 0
-                    });
-
-                    directionsRenderer.setDirections(result);
+                    if (status === 'OK') {
+                        if (directionsRendererRef.current) {
+                            // Update existing DirectionsRenderer with new directions
+                            directionsRendererRef.current.setDirections(result);
+                        } else {
+                            // Create a new DirectionsRenderer and attach it to the map
+                            directionsRendererRef.current = new google.maps.DirectionsRenderer({
+                                map,
+                                suppressMarkers: true,
+                                routeIndex: 0,
+                            });
+                            directionsRendererRef.current.setDirections(result);
+                        }
+                    }
                 }
             );
+        } else {
+            // Clear directions if selectedBusiness is null
+            if (directionsRendererRef.current) {
+                directionsRendererRef.current.setDirections({ routes: [] }); // Clear directions by passing an empty DirectionsResult object
+            }
         }
-    }
+    };
+
+
+
+
+    useEffect(() => {
+        if (token && previousBusinessListRef.current && previousBusinessListRef.current !== token) {
+            if (directionsRendererRef.current) {
+                directionsRendererRef.current.setDirections({ routes: [] });
+                setSelectedBusiness('');
+            }
+            previousBusinessListRef.current = token;
+        } else if (token && !previousBusinessListRef.current) {
+            previousBusinessListRef.current = token;
+        }
+    }, [token])
+
     useEffect(() => {
         getDirection();
     }, [selectedBusiness]);
-
-    // getDirection();
 
     useEffect(() => {
         (map && selectedBusiness) ? map.panTo(selectedBusiness.geometry.location) : '';
     }, [selectedBusiness])
 
+
+    console.log('ref', previousBusinessListRef.current);
+    console.log('token 3', token);
+    console.log(previousBusinessListRef.current === token);
+
     return (
         <div>
-
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={
@@ -61,7 +91,6 @@ const MapView = ({ businessList }) => {
                 }
                 options={{ mapId: '327f00d9bd231a33' }}
                 zoom={13}
-                suppressMarkers={true}
                 onLoad={map => setMap(map)}
             >
                 <MarkerF
@@ -75,7 +104,7 @@ const MapView = ({ businessList }) => {
                     }}
                 />
                 {
-                    directions &&
+                    directions && token &&
                     <DirectionsRenderer
                         directions={directions}
                     />

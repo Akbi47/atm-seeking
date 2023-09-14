@@ -2,7 +2,7 @@ import React from 'react'
 
 const ScrollRight = ({ elementRef }) => {
     const srollToRight = (element) => {
-        element.scrollLeft += 500;
+        element.scrollLeft += 650;
     }
     return (
         <svg xmlns="http://www.w3.org/2000/svg"

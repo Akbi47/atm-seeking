@@ -12,7 +12,8 @@ export default function Home() {
   const [category, setCategory] = useState('');
   const [radius, setRadius] = useState(2500);
   const [loading, setLoading] = useState(true);
-  const [businessList, setBusinessList] = useState([])
+  const [businessList, setBusinessList] = useState([]);
+  const [businessListToken, setBusinessListToken] = useState('');
   const { userLocation, setUserLocation } = useContext(UserLocationContext);
 
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function Home() {
       setLoading(true);
       GlobalApi.getGooglePlace(category, radius, userLocation.lat, userLocation.lng).then(response => {
         setBusinessList(response.data.product.results);
+        setBusinessListToken(response.data.product.next_page_token);
         setLoading(false);
       })
     }
@@ -38,25 +40,25 @@ export default function Home() {
   return (
     <>
       {session?.user ? (
-        <div className='grid grid-cols-1 md:grid-cols-5 h-screen'>
+        <div className='grid grid-cols-1 md:grid-cols-6 h-screen'>
           <div className='p-2 col-span-2'>
             <CategoryList onCategoryChange={(value) => setCategory(value)} />
             <RangeSelect onRadiusChange={(value) => setRadius(value)} />
             <SelectRating onRatingChange={(value) => onRatingChange(value)} />
           </div>
-          <div className='col-span-3'>
+          <div className='col-span-4'>
             <LoadScript
               googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
               mapIds={['327f00d9bd231a33']}
             >
-              <MapView businessList={businessList} />
+              <MapView businessList={businessList} token={businessListToken} />
             </LoadScript>
 
             {
               category && radius &&
-              <div className='md:absolute md:bottom-1 md:w-[58%]
-              ml-6 w-[90%] bottom-36 relative'>
-                {!loading ? <BusinessList businessList={businessList} />
+              <div className='min-[1088px]:absolute min-[1088px]:bottom-1 min-[1088px]:w-[61%]
+              ml-4 w-[90%] relative'>
+                {!loading ? <BusinessList businessList={businessList} token={businessListToken} />
                   :
                   <div className='flex gap-16'>
                     {[1, 2, 3, 4].map((item, index) => (

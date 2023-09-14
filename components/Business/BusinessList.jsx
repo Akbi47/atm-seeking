@@ -4,14 +4,14 @@ import BusinessItem from './BusinessItem'
 import { SelectedBusinessContext } from '@/context';
 import { ScrollLeft, ScrollRight } from '..';
 
-const BusinessList = ({ businessList }) => {
+const BusinessList = ({ businessList, token }) => {
     const elementRef = useRef(null);
     const { selectedBusiness, setSelectedBusiness } = useContext(SelectedBusinessContext);
 
     return (
         <div>
             <ScrollLeft elementRef={elementRef} />
-            <div className='flex gap-10 overflow-scroll
+            <div className='flex gap-1 overflow-scroll
                 overflow-x-auto scrollbar-hide scroll-smooth'
                 ref={elementRef}>
                 {businessList.map((item, idx) => idx <= 7 && (

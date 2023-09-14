@@ -5,7 +5,6 @@ import UserLocation from './UserLocation';
 import SelectedBusiness from './SelectedBusiness';
 import { Raleway } from 'next/font/google'
 
-
 const raleway = Raleway({ subsets: ['latin'] })
 
 export const metadata = {
@@ -13,7 +12,7 @@ export const metadata = {
   description: 'Seeking the ATM near you',
 }
 
-export default function RootLayout({children}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={raleway.className}>
