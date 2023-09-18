@@ -37,16 +37,15 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className='flex text-white font-sans items-center gap-7'>
-                        <h2 className="cursor-pointer hover:text-[#443e8a]">Home</h2>
-                        <h2 className="cursor-pointer hover:text-[#443e8a]">Favourite</h2>
+                        <Link href='/' className='cursor-pointer hover:text-[#443e8a]'>
+                            Home
+                        </Link>
+                        <Link href='/review' className='cursor-pointer hover:text-[#443e8a]'>
+                            Review List
+                        </Link>
                     </div>
                 </div>
                 <ul className="links">
-                    {/* <li>
-                        <Link href="/" className="text-ct-dark-600">
-                            Home
-                        </Link>
-                    </li> */}
                     {!user && (
                         <>
                             <li>
@@ -91,7 +90,7 @@ const Header = () => {
                                     <Image src={user.image}
                                         alt='user' width={40} height={40} className='rounded-full'
                                     />
-                                    <span>{(user?.name).substring(0,9)}</span>
+                                    <span>{(user?.name).substring(0, 9)}</span>
                                     {open &&
                                         (
                                             <div className="options">

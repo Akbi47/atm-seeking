@@ -5,7 +5,6 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { Marker } from "..";
 
 const MapView = ({ businessList, token }) => {
-    console.log('token 1', token);
 
     const { userLocation, setUserLocation } = useContext(UserLocationContext);
     const { selectedBusiness, setSelectedBusiness } = useContext(SelectedBusinessContext);
@@ -18,7 +17,6 @@ const MapView = ({ businessList, token }) => {
         width: '100%',
         height: '70vh',
     };
-
 
     const getDirection = () => {
         if (map && selectedBusiness) {
@@ -54,9 +52,6 @@ const MapView = ({ businessList, token }) => {
         }
     };
 
-
-
-
     useEffect(() => {
         if (token && previousBusinessListRef.current && previousBusinessListRef.current !== token) {
             if (directionsRendererRef.current) {
@@ -76,11 +71,6 @@ const MapView = ({ businessList, token }) => {
     useEffect(() => {
         (map && selectedBusiness) ? map.panTo(selectedBusiness.geometry.location) : '';
     }, [selectedBusiness])
-
-
-    console.log('ref', previousBusinessListRef.current);
-    console.log('token 3', token);
-    console.log(previousBusinessListRef.current === token);
 
     return (
         <div>

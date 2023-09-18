@@ -1,4 +1,4 @@
-import GlobalApi from "@/Shared/GlobalApi";
+import GlobalApi from "@/shared/GlobalApi";
 
 export default async function CalcDistance(lat1, lng1, lat2, lng2) {
     const Location1Str = lat1 + "," + lng1;

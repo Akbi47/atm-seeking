@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image"
 import { GetBusinessName, CheckFormatImg, CalcDistance } from "@/utils";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { UserLocationContext, SelectedBusinessContext } from "@/context";
 import { CancelIcon } from "..";
 
@@ -10,6 +10,8 @@ const BusinessItem = ({ business, showDir = false, onModalChange = true }) => {
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
   const photo_ref = business?.photos ? business?.photos[0]?.photo_reference : '';
+
+  
 
   const [pathName, setpathName] = useState('');
 
@@ -22,11 +24,11 @@ const BusinessItem = ({ business, showDir = false, onModalChange = true }) => {
   const [distance, setDistance] = useState('');
 
   useEffect(() => {
-    getDistance();
+    getDistance;
   }, [userLocation, business])
 
   useEffect(() => {
-    getPathname()
+    getPathname
   }, [businessName]);
 
 
@@ -36,24 +38,20 @@ const BusinessItem = ({ business, showDir = false, onModalChange = true }) => {
       + business.geometry.location.lat
       + ',' + business.geometry.location.lng + '&travelmode=driving')
   }
-  const getDistance = () => {
+  const getDistance = useMemo(() => {
     let dist = CalcDistance(business.geometry.location.lat, business.geometry.location.lng,
       userLocation.lat, userLocation.lng);
     dist.then(res => {
       setDistance(res);
     })
-  }
+  }, [business, userLocation])
 
-  const getPathname = () => {
+  const getPathname = useMemo(() => {
     let imgSource = CheckFormatImg(businessName);
     imgSource.then(res => {
       setpathName(res);
     })
-  }
-
-  // const closeModal = () => {
-  //   setSelectedBusiness('');
-  // }
+  }, [businessName])
 
   return (
     <div className=" w-[195px] flex-shrink-0 p-2 rounded-lg shadow-md mb-4 ml-4
@@ -97,7 +95,6 @@ const BusinessItem = ({ business, showDir = false, onModalChange = true }) => {
               </span>
               <button onClick={() => {
                 onModalChange(false);
-                // setSelectedBusiness('');
               }
               }>
                 <CancelIcon

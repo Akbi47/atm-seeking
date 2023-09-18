@@ -1,11 +1,17 @@
 "use client";
-
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 
 export const LoginForm = () => {
+    const { data: session } = useSession();
     const router = useRouter();
+    useEffect(() => {
+        if (session?.user) {
+            router.push('/');
+        }
+    }, [session, router]);
+
     const [loading, setLoading] = useState(false);
     const [formValues, setFormValues] = useState({
         email: "",

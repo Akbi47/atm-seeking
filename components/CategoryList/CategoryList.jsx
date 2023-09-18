@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import Data from '@/Shared/Data'
+import Data from '@/shared/Data'
 import Image from 'next/image';
 
 const CategoryList = ({ onCategoryChange }) => {
